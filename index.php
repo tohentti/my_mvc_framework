@@ -1,3 +1,4 @@
 <?php
-	echo "Hello world! Greetings from the Index!";
-?>
+	require_once __DIR__ . "/libs/Bootstrap.php";
+	$app = new \libs\Bootstrap();
+
