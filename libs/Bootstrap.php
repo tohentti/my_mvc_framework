@@ -22,15 +22,22 @@ class Bootstrap
     /**
      * @var string
      */
-    private $methodName;
+    private $className;
+    /**
+     * @var string
+     */
+    private $methodName = 'index';
     /**
      * @var array
      */
-    private $methodParams;
+    private $methodParams = array();
 
-    public function __construct()
+    public function __construct($url = '')
     {
-        //echo "bootstrap loaded.";
+        //echo '@Bootstrap: ' . $url;
+        if($this->parseUrlPath($url)) {
+            $this->loadClass();
+        }
     }
 
     public function getUrlPath()
@@ -41,6 +48,11 @@ class Bootstrap
     public function getClassPath()
     {
         return $this->classPath;
+    }
+
+    public function getClassName()
+    {
+        return $this->className;
     }
 
     public function getMethodName()
@@ -57,28 +69,29 @@ class Bootstrap
     {
         if (isset($url)) {
             $this->urlPath = explode('/', rtrim($url, '/'));
+            $this->setPaths();
             return true;
         } else {
             return null;
         }
     }
 
-    public function setPaths()
+    private function setPaths()
     {
         $path = $this->urlPath;
         if (isset($path)) {
             $filePath = '';
             for ($i = 0; $i < count($path); $i++) {
                 $part = $path[$i];
+                $namespace = 'controllers\\' . str_replace('/','\\',strtolower(ltrim($filePath,'/')));
                 $filePath = strtolower($filePath) . '/' . ucfirst($part);
                 $filePathTest = __DIR__ . '/../controllers' . $filePath . '.php';
                 if (file_exists($filePathTest)) {
                     $this->classPath = $filePathTest;
+                    $this->className = $namespace . '\\' . ucfirst($part);
                     array_splice($path, 0, $i + 1);
                     if (isset($path[0]) && !empty($path[0])) {
                         $this->methodName = $path[0];
-                    } else {
-                        $this->methodName = 'index';
                     }
                     array_splice($path, 0, 1);
                     if (count($path) > 0) {
@@ -88,6 +101,18 @@ class Bootstrap
                 }
             }
         }
+
+        $this->classPath = __DIR__ . '/../controllers/common/Error.php';
+        $this->className = 'controllers\\common\\Error';
         return false;
+    }
+
+    private function loadClass()
+    {
+        require_once $this->classPath;
+        $class = new $this->className;
+        $class->getMethod($this);
+        //$class->getMethod($this->methodName, isset($this->methodParams)?$this->methodParams:array());
+        //$class->{$this->methodName}($this->methodParams[0]);
     }
 }

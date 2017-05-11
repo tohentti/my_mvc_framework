@@ -14,12 +14,19 @@ class Home extends Controller
 {
     public function index()
     {
-        echo "This is the Home page!";
+        echo "This is the Home page index-method!";
     }
 
-    public function testmethod($param1)
+/*    public function getMethod($method, array $params = [])
     {
+        // TODO: Implement getMethod() method.
+    }*/
 
-        return 'testmethod(' . $param1 . ')';
+    /**
+     * @param string $param1
+     */
+    public function testmethod($param1 = '')
+    {
+        echo 'Home::testmethod(' . $param1 . ')';
     }
 }

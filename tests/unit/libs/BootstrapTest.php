@@ -32,15 +32,13 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     public function testClassFileIsFound()
     {
-        $this->bootstrapObj->parseUrlPath('common/home/method/param1');
-        $this->assertTrue($this->bootstrapObj->setPaths());
+        $this->assertTrue($this->bootstrapObj->parseUrlPath('common/home/method/param1'));
         return $this->bootstrapObj->getClassPath();
     }
 
     public function testClassPathPropIsPopulated()
     {
         $this->bootstrapObj->parseUrlPath('common/home/method/param1');
-        $this->bootstrapObj->setPaths();
         $actual = $this->bootstrapObj->getClassPath();
         $expected = 'C:\Users\Hendersson\PHPStorm\workspace\my_mvc_framework\libs/../controllers/common/Home.php';
         $this->assertEquals($expected, $actual);
@@ -48,11 +46,10 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodDataPropIsPopulated()
     {
-        $tests = array('common/home', 'common/home/method', 'common/home/method/param1');
-        $expected_results = array('index', 'method', 'method');
+        $tests = array('', 'controller/method', 'common/home', 'common/home/method', 'common/home/method/param1');
+        $expected_results = array('index', 'index', 'index', 'method', 'method');
         for ($i=0; $i<count($tests); $i++) {
             $this->bootstrapObj->parseUrlPath($tests[$i]);
-            $this->bootstrapObj->setPaths();
             $actual = $this->bootstrapObj->getMethodName();
             $expected = $expected_results[$i];
             $this->assertEquals($expected, $actual);
@@ -62,13 +59,13 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     public function testTargetClassHasTargetMethod()
     {
         $urlPath = 'common/home/testmethod/param1';
-        $this->bootstrapObj->setPaths($this->bootstrapObj->parseUrlPath($urlPath));
+        $this->bootstrapObj->parseUrlPath($urlPath);
         require_once $this->bootstrapObj->getClassPath();
-        $target = new Home();
+        $className = $this->bootstrapObj->getClassName();
+        $target = new $className;
         $method = $this->bootstrapObj->getMethodName();
-        $this->assertTrue(method_exists($target, $method));
         $methodParams = $this->bootstrapObj->getMethodParams();
-        echo $target->{$method}($methodParams[0]);
+        $target->getMethod($this->bootstrapObj);
     }
 
 }
