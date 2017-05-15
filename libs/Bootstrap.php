@@ -115,4 +115,23 @@ class Bootstrap
         //$class->getMethod($this->methodName, isset($this->methodParams)?$this->methodParams:array());
         //$class->{$this->methodName}($this->methodParams[0]);
     }
+
+    public function targetMethodIsValid()
+    {
+        require_once $this->classPath;
+        try {
+            $reflection = new \ReflectionMethod($this->className, $this->methodName);
+            if ($reflection->getNumberOfRequiredParameters() <= count($this->getMethodParams())) {
+                echo 'Required:' . $reflection->getNumberOfRequiredParameters() . ', provided params: ' . count($this->getMethodParams());
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (\ReflectionException $re) {
+            return false;
+        }
+
+    }
 }

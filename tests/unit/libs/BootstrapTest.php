@@ -8,7 +8,7 @@
 
 namespace unit\libs;
 
-use controllers\common\Home;
+//use controllers\common\Home;
 use libs\Bootstrap;
 require_once __dir__ . '/../../../libs/Bootstrap.php';
 
@@ -56,16 +56,11 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testTargetClassHasTargetMethod()
+    public function testTargetClassTargetMethodIsValid()
     {
         $urlPath = 'common/home/testmethod/param1';
         $this->bootstrapObj->parseUrlPath($urlPath);
-        require_once $this->bootstrapObj->getClassPath();
-        $className = $this->bootstrapObj->getClassName();
-        $target = new $className;
-        $method = $this->bootstrapObj->getMethodName();
-        $methodParams = $this->bootstrapObj->getMethodParams();
-        $target->getMethod($this->bootstrapObj);
+        $this->assertTrue($this->bootstrapObj->targetMethodIsValid());
     }
 
 }

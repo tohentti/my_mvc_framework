@@ -37,8 +37,11 @@ abstract class Controller
         if (null !== $bootObj->getMethodParams() && !empty($bootObj->getMethodParams())) {
             $paramStr = implode(',', $bootObj->getMethodParams());
         }
-        echo 'You are @ ' . $bootObj->getMethodName() . '('. $paramStr .')';
+        //echo 'You are @ ' . $bootObj->getMethodName() . '('. $paramStr .')';
 
+        $method = new \ReflectionMethod($bootObj->getClassName(), $bootObj->getMethodName());
+        //echo ' required params: ' . $method->getNumberOfRequiredParameters();
+        //echo ' all params: ' . $method->getNumberOfParameters();
     }
 
 }

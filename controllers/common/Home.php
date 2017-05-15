@@ -17,16 +17,11 @@ class Home extends Controller
         echo "This is the Home page index-method!";
     }
 
-/*    public function getMethod($method, array $params = [])
-    {
-        // TODO: Implement getMethod() method.
-    }*/
-
     /**
      * @param string $param1
      */
-    public function testmethod($param1 = '')
+    public function testmethod($param0, $param1, $param2 = '')
     {
-        echo 'Home::testmethod(' . $param1 . ')';
+        //echo 'Home::testmethod(' . $param1 . ')';
     }
 }
