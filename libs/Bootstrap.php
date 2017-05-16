@@ -102,27 +102,41 @@ class Bootstrap
             }
         }
 
+        $this->setAsError();
+        return false;
+    }
+
+    private function setAsError()
+    {
         $this->classPath = __DIR__ . '/../controllers/common/Error.php';
         $this->className = 'controllers\\common\\Error';
-        return false;
+        $this->methodName = 'index';
+        $this->methodParams = array();
     }
 
     private function loadClass()
     {
-        require_once $this->classPath;
-        $class = new $this->className;
-        $class->getMethod($this);
-        //$class->getMethod($this->methodName, isset($this->methodParams)?$this->methodParams:array());
-        //$class->{$this->methodName}($this->methodParams[0]);
+        if ($this->targetMethodIsValid()) {
+            require_once $this->classPath;
+            $class = new $this->className();
+            $class->{$this->methodName}(...$this->methodParams);
+        }
+        else {
+            $this->setAsError();
+            // WARNING: Loop!
+            $this->loadClass();
+        }
     }
 
+    //private
     public function targetMethodIsValid()
     {
         require_once $this->classPath;
         try {
             $reflection = new \ReflectionMethod($this->className, $this->methodName);
             if ($reflection->getNumberOfRequiredParameters() <= count($this->getMethodParams())) {
-                echo 'Required:' . $reflection->getNumberOfRequiredParameters() . ', provided params: ' . count($this->getMethodParams());
+                //echo $this->className . ', ' . $this->methodName;
+                //echo ' Required:' . $reflection->getNumberOfRequiredParameters() . ', provided params: ' . count($this->getMethodParams());
                 return true;
             }
             else {

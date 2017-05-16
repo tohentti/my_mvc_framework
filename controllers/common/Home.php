@@ -14,14 +14,13 @@ class Home extends Controller
 {
     public function index()
     {
-        echo "This is the Home page index-method!";
+        $this->view->addData('testKey', 'testValue: index');
+        $this->view->render('common/Home');
     }
 
-    /**
-     * @param string $param1
-     */
     public function testmethod($param0, $param1, $param2 = '')
     {
-        //echo 'Home::testmethod(' . $param1 . ')';
+        $this->view->addData('testKey', 'testValue: testMethod');
+        $this->view->render('common/Home');
     }
 }

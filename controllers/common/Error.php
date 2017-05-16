@@ -16,9 +16,4 @@ class Error extends Controller
     {
         echo 'ERROR: page does not exist!';
     }
-
-/*    public function getMethod($method, array $params = [])
-    {
-        echo $method . '(' . isset($params)?implode(',', $params):'' . ')';
-    }*/
 }

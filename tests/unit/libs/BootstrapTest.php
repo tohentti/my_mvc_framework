@@ -46,21 +46,27 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     public function testMethodDataPropIsPopulated()
     {
-        $tests = array('', 'controller/method', 'common/home', 'common/home/method', 'common/home/method/param1');
-        $expected_results = array('index', 'index', 'index', 'method', 'method');
-        for ($i=0; $i<count($tests); $i++) {
-            $this->bootstrapObj->parseUrlPath($tests[$i]);
+        $tests = array(''=>'index', 'controller/method'=>'index', 'common/home'=>'index',
+            'common/home/method'=>'method', 'common/home/method/param1'=>'method');
+
+        foreach ($tests as $test => $expected) {
+            $this->bootstrapObj->parseUrlPath($test);
             $actual = $this->bootstrapObj->getMethodName();
-            $expected = $expected_results[$i];
             $this->assertEquals($expected, $actual);
         }
     }
 
     public function testTargetClassTargetMethodIsValid()
     {
-        $urlPath = 'common/home/testmethod/param1';
-        $this->bootstrapObj->parseUrlPath($urlPath);
-        $this->assertTrue($this->bootstrapObj->targetMethodIsValid());
+        $urlPath = array ('common/home/testmethod/param1'=>false,
+            'common/home/testmethod/param1/param2'=>true,
+            'common/home/testmethod/param1/param2/param3'=>true,
+            'common/home/testmethod/param1/param2/param3/param4'=>true);
+
+        foreach ($urlPath as $test => $expected) {
+            $this->bootstrapObj->parseUrlPath($test);
+            $this->assertEquals($this->bootstrapObj->targetMethodIsValid(), $expected);
+        }
     }
 
 }
