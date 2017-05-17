@@ -1,0 +1,4 @@
+div#header, div#footer {
+    width: 100%;
+    background: lightblue;
+}

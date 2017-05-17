@@ -1,5 +1,7 @@
 <html>
-<head></head>
+<head>
+    <link rel="stylesheet" type="text/css" href="/resources/css/stylesheet.css" >
+</head>
 <body>
-<div>Header</div>
+<div id="header">Header</div>
 
